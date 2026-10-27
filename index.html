@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ติดตามงานทีมช่าง</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#1a2233;--mut:#6b7590;--bd:#e2e7f1;--pri:#2563eb;--chip:#eaf0ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0e1320;--card:#171e30;--tx:#e8ecf6;--mut:#8f9ab5;--bd:#27314b;--pri:#5b8cff;--chip:#1f2a47}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0e1320;--card:#171e30;--tx:#e8ecf6;--mut:#8f9ab5;--bd:#27314b;--pri:#5b8cff;--chip:#1f2a47}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px);font-size:80%}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Noto Sans Thai","Sarabun",system-ui,sans-serif;line-height:1.5}
+.c-create{--c:#64748b}.c-assign{--c:#3b82f6}.c-accept{--c:#14b8a6}.c-depart{--c:#8b5cf6}.c-onsite{--c:#f59e0b}.c-done{--c:#22c55e}.c-leave{--c:#84cc16}.c-help{--c:#ef4444}.p-None{--c:#3b82f6}.p-Minor{--c:#eab308}.p-Major{--c:#f97316}.p-Critical{--c:#dc2626}.pb{font-size:.72rem;padding:2px 9px;border-radius:99px;background:var(--c);color:#fff;font-weight:700;white-space:nowrap}.p-Minor.pb{color:#1a1a1a}.sla{font-size:.82rem;margin:4px 0}.sla.bad{color:#ef4444;font-weight:700}.sla.ok{color:#22c55e}.sla.warn{color:#f59e0b;font-weight:700}.c-sla{--c:#f59e0b}.job.near{box-shadow:0 0 0 2px #f59e0b66}.dbar{align-items:center}.bar input.dt{flex:0 1 150px;min-width:140px}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:1.4rem;margin:4px 0 2px}.sub{color:var(--mut);font-size:.85rem;margin:0 0 10px}
+h3{margin:0 0 8px;font-size:1rem}
+textarea{min-height:130px;resize:vertical;line-height:1.5}
+#f-paste{min-height:80px}.paste{background:var(--chip);border:1px dashed var(--pri);border-radius:12px;padding:10px;margin-bottom:6px}.pts a{color:var(--pri);margin-right:10px;font-size:.82rem}.meta{font-size:.84rem;color:var(--mut);margin:4px 0}.desc{max-height:9em;overflow:auto}
+.banner{background:#f59e0b22;border:1px solid #f59e0b88;border-radius:10px;padding:8px 12px;font-size:.85rem;margin-bottom:10px}
+input,select,textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 12px;width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);outline-offset:-1px}
+button{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:8px 14px}
+button.pri{background:var(--pri);border-color:var(--pri);color:#fff;font-weight:600}
+button.danger{color:#ef4444}button[hidden]{display:none}
+.tabs{display:flex;gap:6px;margin-bottom:10px}.tabs button{flex:1;font-weight:600;padding:8px 4px;font-size:.85rem}.tabs .on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px}
+.chip{border-radius:99px;padding:5px 14px;white-space:nowrap;font-size:.85rem}.chip.on{background:var(--c,var(--pri));color:#fff;border-color:var(--c,var(--pri))}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.bar input{flex:1;min-width:180px}.bar select{width:auto;min-width:140px}.bar select.dt{min-width:96px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;border-top:4px solid var(--c,var(--pri))}.stat b{font-size:1.6rem;display:block;line-height:1.2}.stat span{color:var(--mut);font-size:.8rem}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.br{display:grid;grid-template-columns:90px 1fr 34px;gap:8px;align-items:center;margin:6px 0;font-size:.85rem}
+.trk{height:12px;background:var(--bd);border-radius:99px;overflow:hidden;display:flex}.trk i{display:block;height:100%;background:var(--c,var(--pri))}
+.li{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:.88rem}.li:last-child{border:0}
+.mut{color:var(--mut);font-size:.82rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.job{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;border-left:5px solid var(--c)}
+.job.c-help{box-shadow:0 0 0 2px #ef444440}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}.no{font-weight:700;font-size:1.05rem}
+.badge{font-size:.75rem;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--c);font-weight:700;white-space:nowrap}
+.desc{margin:6px 0;color:var(--mut);font-size:.9rem;word-break:break-word;white-space:pre-wrap}
+.team{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.team span{background:var(--chip);border-radius:99px;padding:3px 10px;font-size:.82rem}
+.late{color:#ef4444;font-weight:600}
+.tl{display:grid;grid-template-columns:repeat(7,1fr);margin:12px 0 8px;text-align:center}
+.st{position:relative;font-size:.56rem;color:var(--mut);line-height:1.3}
+.st:before{content:"";position:absolute;top:9px;left:-50%;width:100%;height:3px;background:var(--bd)}
+.st:first-child:before{display:none}.st.done:before{background:var(--c)}
+.dot{position:relative;z-index:1;width:20px;height:20px;border-radius:50%;background:var(--bd);margin:0 auto 4px;display:grid;place-items:center;color:#fff;font-size:.65rem}
+.st.done .dot{background:var(--c)}.st.done{color:var(--tx)}.st b{display:block;font-size:.6rem;color:var(--c)}.st small{display:block}
+.helpbox{background:#ef444415;border:1px solid #ef444455;color:#ef4444;border-radius:10px;padding:6px 10px;font-size:.84rem;margin:8px 0}
+.act{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.act button{padding:6px 12px;font-size:.84rem}
+.empty{text-align:center;color:var(--mut);padding:36px 0;grid-column:1/-1}
+dialog{border:1px solid var(--bd);border-radius:16px;background:var(--card);color:var(--tx);width:min(600px,94vw);max-height:92vh;padding:18px}
+dialog::backdrop{background:#0008}
+label{display:block;font-size:.82rem;color:var(--mut);margin:10px 0 3px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.r3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.jb{display:flex;align-items:center;gap:6px}.jb i{font-style:normal;font-weight:700}
+.foot{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.err{color:#ef4444;font-size:.85rem;min-height:1.2em;margin-top:8px}
+@media(max-width:520px){.r2,.r3{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
+
+/* ===== merged into RNOC: Tesla-style palette ===== */
+:root,:root[data-theme="light"]{--bg:#f4f4f4;--card:#ffffff;--tx:#171a20;--mut:#5c5e62;--bd:#d0d1d2;--pri:#3e6ae1;--chip:#e7e8ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0e10;--card:#1b1e23;--tx:#f2f3f5;--mut:#9ba1a9;--bd:#2e333a;--pri:#3e6ae1;--chip:#262a31}}
+:root[data-theme="dark"]{--bg:#0d0e10;--card:#1b1e23;--tx:#f2f3f5;--mut:#9ba1a9;--bd:#2e333a;--pri:#3e6ae1;--chip:#262a31}
+body{font-family:"Helvetica Neue",Helvetica,Arial,"Noto Sans Thai","Sarabun",system-ui,sans-serif}
+.wrap{padding-top:8px}
+select[data-a="tstat"] option{background:var(--card);color:var(--tx);font-weight:400}
+#nav{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:50}
+#nav a{background:var(--pri);color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:8px 14px;border-radius:12px;white-space:nowrap}
+#nav b{font-size:14px}#nav small{color:var(--mut);margin-left:auto;font-size:11px}
+@media(max-width:760px){#nav small{display:none}}
+</style>
+</head>
+<body>
+<div id="nav"><a href="https://rnocmap.vercel.app/">🗺 กลับแผนที่</a><b>🛠 ติดตามงานทีมช่าง</b><small>RNOC SOUTH · by Hareef</small></div>
+<div class="wrap">
+  <h1>📡 ติดตามงานทีมช่าง</h1>
+  <p class="sub" id="sub">กำลังเชื่อมต่อ Supabase… | by Hareef</p>
+  <div class="banner" id="banner" hidden></div>
+  <div class="banner" id="alertbar" hidden style="cursor:pointer;background:#ef444420;border-color:#ef4444"></div>
+  <div class="tabs" id="tabs"></div>
+  <div class="chips" id="pchips"></div>
+
+  <section id="v-dash"></section>
+
+  <section id="v-jobs" hidden>
+    <div class="bar">
+      <input id="q" type="search" placeholder="ค้นหา เลขงาน, ชื่อช่าง, รายละเอียด…">
+      <select id="fpr"></select>
+      <button class="pri" id="add">＋ เพิ่มงาน</button>
+      <button id="exp" hidden>⬇ Export Excel</button>
+    </div>
+    <div class="bar dbar"><span class="mut">📅 กรองวันที่</span>
+      <select id="fby" class="dt" style="min-width:150px"><option value="create">ตามวันที่สร้างงาน</option><option value="due">ตามเส้นตาย</option></select>
+      <input type="date" id="fdf" class="dt" title="ตั้งแต่วันที่"><span class="mut">ถึง</span><input type="date" id="fdt" class="dt" title="ถึงวันที่">
+      <button id="fp1">วันนี้</button><button id="fp7">7 วัน</button><button id="fpm">เดือนนี้</button><button id="fclr">ล้าง</button></div>
+    <div class="chips" id="chips"></div>
+    <div class="grid" id="list"></div>
+  </section>
+
+  <section id="v-team" hidden>
+    <div class="bar"><button class="pri" id="addt">＋ เพิ่มช่าง</button><button class="pri" id="addtm">＋ สร้างทีม</button></div>
+    <div class="stats" id="tstats"></div>
+    <h3>กองงาน</h3><div class="grid" id="tmlist"></div>
+    <h3 style="margin-top:14px">รายชื่อช่างทั้งหมด (จับคู่ทีม / สถานะ ทำงาน-ลา-วันหยุด)</h3><div class="panel" id="tclist"></div>
+  </section>
+
+  </div>
+
+<dialog id="dlg">
+  <h3 id="dt">เพิ่มงาน</h3>
+  <div class="paste"><label style="margin-top:0">⚡ วางข้อความงานจากระบบ (กรอกอัตโนมัติ)</label><textarea id="f-paste" rows="3" placeholder="วางข้อความที่นี่ เช่น JB26-1234567 : Service Outage : … Finish Before 24-10-2026 13:09:00 to ผู้รับงาน by ผู้ส่งงาน 08xxxxxxxx แล้วขึ้นบรรทัดใหม่ตามด้วยชื่อทีมช่าง คั่นด้วย ,"></textarea><div class="mut" id="f-parsed" style="margin-top:4px"></div><div class="pts" id="f-pts"></div></div>
+  <label>เลขงาน</label>
+  <div class="jb"><i>JB26-</i><input id="f-no" maxlength="7" inputmode="numeric" placeholder="1234567"></div>
+  <label>ความสำคัญ (Priority)</label><select id="f-pri"></select><div class="mut" id="f-sla" style="margin-top:4px"></div>
+  <label>เส้นตายปิดงาน (Finish Before)</label><input type="datetime-local" id="f-due">
+  <label>หัวข้องาน</label><input id="f-title" placeholder="เช่น Service Outage">
+  <div class="r2"><div><label>ผู้ส่งงาน</label><input id="f-snd"></div><div><label>เบอร์ผู้ส่งงาน</label><input id="f-tel" inputmode="tel"></div></div>
+  <label>ผู้รับงาน</label><input id="f-rcv">
+  <label>รายละเอียดงาน</label>
+  <textarea id="f-desc" rows="5" placeholder="เช่น อาการ/ปัญหา, ตำแหน่งหรือจุดที่เกิดเหตุ, ชื่อลูกค้าและเบอร์ติดต่อ, ข้อมูลเพิ่มเติม"></textarea>
+  <label>เลือกกองงาน (เติมชื่ออัตโนมัติ)</label><select id="f-teamsel"></select>
+  <label>ทีมช่าง (3 คน)</label>
+  <div class="r3"><input id="m0" placeholder="ช่างคนที่ 1"><input id="m1" placeholder="ช่างคนที่ 2"><input id="m2" placeholder="ช่างคนที่ 3"></div>
+  <label>จังหวัด</label><select id="f-prov"></select>
+  <label>วัน-เวลาแต่ละขั้นตอน (เว้นว่างได้)</label>
+  <div class="r2" id="times"></div>
+  <label style="display:flex;gap:6px;align-items:center;color:var(--tx)"><input type="checkbox" id="f-help" style="width:auto"> สถานะ Help (งานติดปัญหา)</label>
+  <input id="f-note" placeholder="ระบุปัญหา เช่น ขาดอุปกรณ์ เข้าพื้นที่ไม่ได้" style="margin-top:6px">
+  <div class="err" id="err"></div>
+  <div class="foot"><button id="cancel">ยกเลิก</button><button class="pri" id="save">บันทึก</button></div>
+</dialog>
+
+<dialog id="dlg3">
+  <h3 id="tt">เพิ่มช่าง</h3>
+  <label>ชื่อช่าง</label><input id="t-name">
+  <div class="r2"><div><label>เบอร์โทร</label><input id="t-tel" inputmode="tel"></div><div><label>จังหวัด</label><select id="t-prov"></select></div></div>
+  <label>ทีม</label><select id="t-team"></select>
+  <div class="err" id="err3"></div><div class="foot"><button id="cancel3">ยกเลิก</button><button class="pri" id="save3">บันทึก</button></div>
+</dialog>
+
+<dialog id="dlg4">
+  <h3 id="tmt">สร้างทีม</h3>
+  <label>ชื่อทีม</label><input id="tm-name" placeholder="เช่น ทีม A"><select id="tm-prov" hidden></select>
+  <label>จังหวัด</label><select id="tm-flt" style="margin-bottom:6px"><option value="ปัตตานี">ปัตตานี</option><option value="ยะลา">ยะลา</option><option value="นราธิวาส">นราธิวาส</option><option value="all">ทุกจังหวัด</option></select><label>สมาชิกทีม (ติ๊กเลือกช่างที่จะจับคู่)</label><div id="tm-mem" class="panel" style="max-height:240px;overflow:auto;padding:8px"></div>
+  <div class="err" id="err4"></div><div class="foot"><button id="cancel4">ยกเลิก</button><button class="pri" id="save4">บันทึก</button></div>
+</dialog>
+
+<dialog id="dlg5">
+  <h3 id="lvt">ลางาน</h3>
+  <label>ประเภท</label><select id="lv-type"><option value="leave">🏖 ลา</option><option value="off">📅 วันหยุด</option></select>
+  <div class="r2"><div><label>ลาตั้งแต่วันที่</label><input type="date" id="lv-from"></div><div><label>ถึงวันที่</label><input type="date" id="lv-to"></div></div>
+  <label>เหตุผล</label><input id="lv-note" placeholder="ลาป่วย / ลากิจ / พักร้อน">
+  <div class="err" id="err5"></div>
+  <div class="foot"><button id="cancel5">ปิด</button><button class="danger" id="lv-clear">ยกเลิกการลา</button><button class="pri" id="save5">บันทึก</button></div>
+</dialog>
+
+<dialog id="cfm"><p id="cfm-t" style="margin:0 0 6px"></p><div class="foot"><button id="cfm-no">ยกเลิก</button><button class="danger" id="cfm-yes">ลบ</button></div></dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const STEPS=[["create","Create"],["assign","Assign"],["accept","Accept"],["depart","Depart"],["onsite","Onsite"],["done","Done"],["leave","Leave"]];
+const PROV={"ปัตตานี":["เมืองปัตตานี","โคกโพธิ์","หนองจิก","ปะนาเระ","มายอ","ทุ่งยางแดง","สายบุรี","ไม้แก่น","ยะหริ่ง","ยะรัง","กะพ้อ","แม่ลาน"],
+"ยะลา":["เมืองยะลา","เบตง","บันนังสตา","ธารโต","ยะหา","รามัน","กาบัง","กรงปินัง"],
+"นราธิวาส":["เมืองนราธิวาส","ตากใบ","บาเจาะ","ยี่งอ","ระแงะ","รือเสาะ","ศรีสาคร","แว้ง","สุคิริน","สุไหงโก-ลก","สุไหงปาดี","จะแนะ","เจาะไอร้อง"],
+"สงขลา":["เมืองสงขลา","สทิงพระ","จะนะ","นาทวี","เทพา","สะบ้าย้อย","ระโนด","กระแสสินธุ์","รัตภูมิ","สะเดา","หาดใหญ่","นาหม่อม","ควนเนียง","บางกล่ำ","สิงหนคร","คลองหอยโข่ง"]};
+const KEY={jobs:"jb26-jobs",leaves:"jb26-leaves",techs:"jb26-techs",teams:"jb26-teams",history:"jb26-history"};
+const PRI=["None","Minor","Major","Critical"],SLA={None:720,Minor:72,Major:10,Critical:3},SLAT={None:"30 วัน",Minor:"3 วัน",Major:"10 ชม.",Critical:"3 ชม."};
+const pri=j=>PRI.includes(j.priority)?j.priority:"None";
+const data={jobs:[],leaves:[],techs:[],teams:[],history:[]},cols={jobs:null,leaves:null,techs:null,teams:null,history:null};
+const S={tab:"dash",prov:"all",dist:"all",flt:"all",pri:"all",df:"",dt:"",by:"create",q:""};
+let canWrite=true,DL=null,editId=null,editLid=null,busy=false,curPts=[],autoCreate=false,warnKey="";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())};
+const fD=i=>i?new Date(i).toLocaleDateString("th-TH",{day:"numeric",month:"short"}):"–";
+const fT=i=>i?new Date(i).toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"}):"";
+const fDT=i=>i?fD(i)+" "+fT(i):"–";
+const fFull=i=>{if(!i)return"";const d=new Date(i);return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+" "+pad(d.getHours())+":"+pad(d.getMinutes())};
+const toLocal=i=>{if(!i)return"";const d=new Date(i);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)};
+const now=()=>new Date().toISOString();
+const lastIdx=j=>{let r=-1;STEPS.forEach(([k],n)=>{if(j.steps&&j.steps[k])r=n});return r};
+const status=j=>j.help?"help":(lastIdx(j)<0?"create":STEPS[lastIdx(j)][0]);
+const label=s=>s==="help"?"Help":STEPS.find(x=>x[0]===s)[1];
+const fin=j=>["done","leave"].includes(status(j));
+const dueAt=j=>j.deadline?new Date(j.deadline).getTime():(j.steps&&j.steps.create?new Date(j.steps.create).getTime()+SLA[pri(j)]*36e5:null);
+const dur=ms=>{const m=Math.max(0,Math.round(ms/6e4)),d=Math.floor(m/1440),h=Math.floor(m%1440/60);return d>0?d+" วัน "+h+" ชม.":h>0?h+" ชม. "+m%60+" นาที":m+" นาที"};
+const slaInfo=j=>{const du=dueAt(j);if(du===null)return null;const dv=j.steps.done||j.steps.leave,done=dv?new Date(dv).getTime():null,diff=du-(done===null?Date.now():done);return{done:done!==null,over:diff<0,diff,near:done===null&&diff>=0&&diff<SLA[pri(j)]*36e5*0.25}};
+const isLate=j=>{const s=slaInfo(j);return!!s&&!s.done&&s.over};
+function slaLine(j){const s=slaInfo(j);if(!s)return"";const t=j.deadline?"กำหนด "+fDT(j.deadline):"SLA "+SLAT[pri(j)];
+  if(s.done)return `<div class="sla ${s.over?"bad":"ok"}">${s.over?"❌ ปิดงานเกิน SLA "+dur(-s.diff):"✅ ปิดงานทัน SLA"} · ${t}</div>`;
+  return `<div class="sla ${s.over?"bad":s.near?"warn":""}">${s.over?"⏱ เกิน SLA "+dur(-s.diff):(s.near?"⚠️ ใกล้ครบ SLA · เหลือ ":"⏳ เหลือ ")+dur(s.diff)} · ${t}</div>`}
+const leaveState=l=>{const t=today();return l.to<t?"end":l.from>t?"soon":"now"};
+
+/* ---------- storage ---------- */
+function lsGet(k){try{const v=JSON.parse(localStorage.getItem(k));return Array.isArray(v)?v:[]}catch(e){return[]}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function fail(e){alert("บันทึกไม่สำเร็จ"+(e&&e.code==="invalid_argument"?" (สิทธิ์ของคุณอาจเป็นแบบอ่านอย่างเดียว)":" กรุณาลองอีกครั้ง"))}
+function persist(n,o){if(!canWrite){fail({code:"invalid_argument"});return}
+  if(cols[n]){const{id,...d}=o;cols[n].doc(String(id)).set(d).catch(fail)}else{lsSet(KEY[n],data[n]);render()}}
+function remove(n,o){if(!canWrite){fail({code:"invalid_argument"});return}
+  if(cols[n])cols[n].doc(String(o.id)).delete().catch(fail);else{data[n]=data[n].filter(x=>x!==o);lsSet(KEY[n],data[n]);render()}}
+function banner(t){const b=$("#banner");b.textContent=t;b.hidden=!t}
+/* ---------- Supabase ---------- */
+const SB_URL="https://pxnpfihzbjaanhthhhwy.supabase.co",SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4bnBmaWh6YmphYW5odGhoaHd5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4NTYyOTcsImV4cCI6MjEwNzQzMjI5N30.4G8Qaj1FghmJM9GOxc3pwRhX3vt7Fm0KPd3i814PII8";
+const TBL={jobs:"jt_jobs",techs:"jt_techs",teams:"jt_teams",history:"jt_history"};
+let NAME="";
+let SB=null;
+async function loadTable(n){
+  let q=SB.from(TBL[n]).select("id,data");
+  if(n==="history")q=q.order("updated_at",{ascending:false}).limit(500);
+  const{data:rows,error}=await q;if(error)throw error;
+  data[n]=rows.map(r=>({...r.data,id:r.id}));
+}
+const refresh=n=>loadTable(n).then(render).catch(()=>{});
+function mkCol(n){return{doc:id=>({
+  set:async d=>{const{error}=await SB.from(TBL[n]).upsert({id:String(id),data:d,updated_at:new Date().toISOString()});if(error)throw error;refresh(n)},
+  delete:async()=>{const{error}=await SB.from(TBL[n]).delete().eq("id",String(id));if(error)throw error;refresh(n)}})}}
+DL={save:async({filename,data:blob})=>{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}};
+async function initDb(){
+  try{
+    if(!window.supabase)throw new Error("โหลดไลบรารี Supabase ไม่สำเร็จ (ตรวจอินเทอร์เน็ต)");
+    SB=window.supabase.createClient(SB_URL,SB_KEY);
+    for(const n of Object.keys(TBL)){await loadTable(n);cols[n]=mkCol(n);
+      SB.channel("jt-"+n).on("postgres_changes",{event:"*",schema:"public",table:TBL[n]},()=>refresh(n)).subscribe()}
+    $("#sub").textContent="🔄 เชื่อมต่อ Supabase | by Hareef";banner("");render();
+  }catch(e){
+    Object.keys(cols).forEach(k=>cols[k]=null);$("#sub").textContent="ข้อมูลบันทึกในเครื่องนี้ | by Hareef";
+    data.jobs=lsGet(KEY.jobs);data.techs=lsGet(KEY.techs);data.teams=lsGet(KEY.teams);data.history=lsGet(KEY.history);
+    banner("เชื่อมต่อ Supabase ไม่ได้ กำลังใช้ข้อมูลในเครื่องนี้: "+((e&&e.message)||e));render();
+  }
+  $("#exp").hidden=false;
+}
+
+/* ---------- helpers ---------- */
+const inProv=x=>S.prov==="all"||x.province===S.prov;
+const match=j=>{const s=S.q.trim().toLowerCase();return!s||("jb26-"+j.no+" "+(j.desc||"")+" "+(j.title||"")+" "+(j.sender||"")+" "+(j.receiver||"")+" "+(j.team||[]).join(" ")+" "+(j.district||"")).toLowerCase().includes(s)};
+const isAuto=j=>/\bauto\b/i.test(j.sender||"");
+const ptLink=x=>`<a href="${esc(x.url||("https://www.google.com/maps?q="+encodeURIComponent(x.lat+","+x.lng)))}" target="_blank" rel="noopener noreferrer">🗺 ${esc(x.n||"พิกัด")}${x.lat?` (${esc(x.lat)}, ${esc(x.lng)})`:""}</a>`;
+function metaLine(j){const p=[];
+  if(j.title)p.push(`<div class="meta"><b>${esc(j.title)}</b></div>`);
+  if(j.sender||j.receiver)p.push(`<div class="meta">${j.sender?(isAuto(j)?"🤖 ระบบส่งอัตโนมัติ":`📤 ${esc(j.sender)}${j.senderTel?` · <a href="tel:${esc(j.senderTel)}">${esc(j.senderTel)}</a>`:""}`):""}${j.sender&&j.receiver?" → ":""}${j.receiver?`📥 ${esc(j.receiver)}`:""}</div>`);
+  if(j.pts&&j.pts.length)p.push(`<div class="pts">${j.pts.map(ptLink).join("")}</div>`);
+  return p.join("")}
+const risk=j=>{const s=slaInfo(j);return!!s&&!s.done&&(s.over||s.near)};
+const nearJ=j=>{const s=slaInfo(j);return!!s&&!s.done&&s.near};
+const flt=j=>S.flt==="all"||(S.flt==="sla"?risk(j):status(j)===S.flt);
+function alertBar(){const a=$("#alertbar"),o=data.jobs.filter(isLate).length,n=data.jobs.filter(nearJ).length;a.hidden=!(o||n);
+  a.textContent=(o?"🚨 เกิน SLA "+o+" งาน":"")+(o&&n?" · ":"")+(n?"⚠️ ใกล้ครบ SLA "+n+" งาน":"")+" (แตะเพื่อดู)"}
+$("#alertbar").onclick=()=>{S.tab="jobs";S.flt="sla";render()};
+const dk=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const dateOk=j=>{if(!S.df&&!S.dt)return true;const c=S.by==="due"?dueAt(j):(j.steps&&j.steps.create);if(!c)return false;const k=dk(new Date(c));return(!S.df||k>=S.df)&&(!S.dt||k<=S.dt)};
+const jobsF=()=>data.jobs.filter(inProv).filter(j=>S.dist==="all"||j.district===S.dist).filter(j=>S.pri==="all"||pri(j)===S.pri).filter(dateOk);
+const opts=(arr,sel,ph)=>(ph?`<option value="${ph[0]}">${ph[1]}</option>`:"")+arr.map(a=>`<option ${a===sel?"selected":""}>${esc(a)}</option>`).join("");
+
+/* ---------- render ---------- */
+function render(){alertBar();
+  $("#tabs").innerHTML=[["dash","📊 ภาพรวม"],["jobs","🛠 งาน"],["team","👷 กองงาน"]].map(([k,l])=>`<button class="${S.tab===k?"on":""}" data-t="${k}">${l}</button>`).join("");
+  $("#pchips").innerHTML=["all",...Object.keys(PROV)].map(p=>`<button class="chip ${S.prov===p?"on":""}" data-p="${p}">${p==="all"?"ทุกจังหวัด":p}</button>`).join("");
+  ["dash","jobs","team"].forEach(k=>$("#v-"+k).hidden=S.tab!==k);
+  $("#add").hidden=!canWrite;$("#addt").hidden=!canWrite;$("#addtm").hidden=!canWrite;
+  if(S.tab==="dash")dash();else if(S.tab==="jobs")jobsView();else teamView();
+}
+function bars(js,keyFn,keys){
+  return keys.map(k=>{const g=js.filter(j=>keyFn(j)===k),t=g.length,d=g.filter(fin).length,h=g.filter(j=>status(j)==="help").length,p=t-d-h,w=n=>t?n/t*100:0;
+    return `<div class="br"><span>${esc(k)}</span><div class="trk" title="เสร็จ ${d} · ดำเนินการ ${p} · Help ${h}"><i class="c-done" style="width:${w(d)}%"></i><i class="c-accept" style="width:${w(p)}%"></i><i class="c-help" style="width:${w(h)}%"></i></div><b>${t}</b></div>`}).join("")}
+function dash(){
+  const js=data.jobs.filter(inProv),ls=data.techs.filter(inProv),c=k=>js.filter(j=>status(j)===k).length;
+  const done=c("done")+c("leave"),help=c("help"),prog=js.length-done-help,late=js.filter(isLate).length,nr=js.filter(nearJ).length,lv=ls.filter(onLeave).sort((a,b)=>{const po=k=>{const x=Object.keys(PROV).indexOf(k);return x<0?99:x};return po(a.province)-po(b.province)||a.name.localeCompare(b.name,"th",{numeric:true})});
+  const card=(cl,n,t)=>`<div class="stat ${cl}"><b>${n}</b><span>${t}</span></div>`;
+  const mx=Math.max(1,...[...STEPS.map(x=>x[0]),"help"].map(c));
+  const rk=js.filter(risk).map(j=>({j,s:slaInfo(j)})).sort((a,b)=>a.s.diff-b.s.diff);
+  const opn=js.filter(j=>!fin(j)),pr=PRI.slice().reverse().map(p=>{const g=opn.filter(j=>pri(j)===p),o=g.filter(isLate).length;return `<div class="br"><span class="pb p-${p}" style="justify-self:start">${p}</span><div class="trk p-${p}"><i style="width:${opn.length?g.length/opn.length*100:0}%"></i></div><b>${g.length}</b></div><div class="mut" style="margin:-2px 0 4px 98px">SLA ${SLAT[p]} · เกิน SLA ${o}</div>`}).join("");
+  const byArea=bars(js,j=>j.province,S.prov==="all"?Object.keys(PROV):[S.prov]);
+  const hl=js.filter(j=>j.help).sort((a,b)=>(b.help.at||"").localeCompare(a.help.at||""));
+  $("#v-dash").innerHTML=`<div class="stats">${card("",js.length,"งานทั้งหมด")}${card("c-accept",prog,"กำลังดำเนินการ")}${card("c-help",help,"Help")}${card("c-done",done,"เสร็จสิ้น (Done/Leave)")}${card("c-onsite",late,"เกิน SLA (ยังไม่ปิด)")}${card("c-sla",nr,"ใกล้ครบ SLA")}${card("c-depart",lv.length,"ช่างลา/หยุดวันนี้")}${card("c-done",data.techs.filter(inProv).filter(working).length,"ช่างมาทำงาน")}</div>
+  <div class="two">
+   <div class="panel"><h3>งานแยกตามสถานะ</h3>${[...STEPS.map(x=>x[0]),"help"].map(k=>`<div class="br"><span>${label(k)}</span><div class="trk c-${k}"><i style="width:${c(k)/mx*100}%"></i></div><b>${c(k)}</b></div>`).join("")}</div>
+   <div class="panel"><h3>งานที่ยังเปิดอยู่ แยกตามความสำคัญ</h3>${pr}</div>
+   <div class="panel"><h3>งานแยกตามจังหวัด</h3>${byArea||'<div class="mut">ยังไม่มีข้อมูล</div>'}<div class="mut" style="margin-top:6px">🟩 เสร็จ · 🟦 ดำเนินการ · 🟥 Help</div></div>
+   <div class="panel"><h3>⚠️ ใกล้ครบ / เกิน SLA</h3>${rk.map(({j,s})=>`<div class="li"><span><b>JB26-${esc(j.no)}</b> <span class="pb p-${pri(j)}">${pri(j)}</span><br><span class="mut">${label(status(j))} · ${esc(j.province||"")}</span></span><span class="${s.over?"late":"sla warn"}">${s.over?"เกิน "+dur(-s.diff):"เหลือ "+dur(s.diff)}</span></div>`).join("")||'<div class="mut">ไม่มีงานเสี่ยง SLA 🎉</div>'}</div>
+   <div class="panel"><h3>🆘 งานที่ต้องการความช่วยเหลือ</h3>${hl.map(j=>`<div class="li"><span><b>JB26-${esc(j.no)}</b> <span class="mut">${esc(j.province||"")}</span><br><span class="mut">${esc(j.help.note||"ไม่ระบุปัญหา")}</span></span><span class="mut">${fDT(j.help.at)}</span></div>`).join("")||'<div class="mut">ไม่มีงาน Help 🎉</div>'}</div>
+   <div class="panel"><h3>🏖 ช่างที่ลา/หยุดวันนี้ · รวม ${lv.length} คน</h3>${lv.map(l=>`<div class="li"><span><b>${esc(l.name)}</b> <span class="mut">${esc(l.province)}</span></span><span class="mut">${l.leave?esc(lvLabel(l)+(l.leave.note&&l.leave.note!=="วันหยุด"?" · "+l.leave.note:""))+" · ถึง "+esc(l.leave.to):esc(teamName(l.teamId)||"ยังไม่มีทีม")}</span></div>`).join("")||'<div class="mut">ไม่มีผู้ลาวันนี้</div>'}</div>
+  </div>`;
+}
+function jobsView(){
+  $("#fpr").innerHTML=opts(PRI,S.pri,["all","ทุกระดับความสำคัญ"]);$("#fdf").value=S.df;$("#fdt").value=S.dt;$("#fby").value=S.by;
+  const base=jobsF().filter(match),cnt=k=>base.filter(j=>k==="sla"?risk(j):status(j)===k).length;
+  $("#chips").innerHTML=[["all","ทั้งหมด"],...STEPS,["help","Help"],["sla","⚠️ ใกล้ครบ/เกิน SLA"]].map(([k,l])=>`<button class="chip c-${k} ${S.flt===k?"on":""}" data-f="${k}">${l} (${k==="all"?base.length:cnt(k)})</button>`).join("");
+  const rows=base.filter(flt).sort((a,b)=>PRI.indexOf(pri(b))-PRI.indexOf(pri(a))||((b.steps&&b.steps.create)||"").localeCompare((a.steps&&a.steps.create)||""));
+  $("#list").innerHTML=rows.length?rows.map(card).join(""):'<div class="empty">ไม่พบงาน · กด ＋ เพิ่มงาน เพื่อเริ่มต้น</div>';
+}
+function card(j){
+  const s=status(j),li=lastIdx(j),nx=STEPS[li+1],id=esc(j.id),st=j.steps||{};
+  return `<div class="job c-${s}${nearJ(j)?" near":""}">
+   <div class="top"><span class="no">JB26-${esc(j.no)}</span><span style="display:flex;gap:6px;align-items:center"><span class="pb p-${pri(j)}">${pri(j)}</span><span class="badge">${label(s)}</span></span></div>
+   <div class="desc">${esc(j.desc)||"–"}</div>
+   <div class="mut">📍 ${esc(j.province||"–")}</div>
+   ${slaLine(j)}
+   ${metaLine(j)}
+   <div class="team">${(j.team||[]).filter(Boolean).map(n=>`<span>👷 ${esc(n)}</span>`).join("")||"<span>ยังไม่ระบุทีม</span>"}</div>
+   <div class="tl">${STEPS.map(([k,l])=>`<div class="st c-${k} ${st[k]?"done":""}"><div class="dot">${st[k]?"✓":""}</div><b>${l}</b><small>${st[k]?fD(st[k]):"–"}</small><small>${fT(st[k])}</small></div>`).join("")}</div>
+   ${j.help?`<div class="helpbox">🆘 Help · ${fDT(j.help.at)}${j.help.note?" · "+esc(j.help.note):""}</div>`:""}
+   ${canWrite?`<div class="act">
+    ${nx?`<button class="pri" style="background:var(--c);border-color:var(--c)" data-a="next" data-id="${id}">อัปเดต: ${nx[1]}</button>`:""}
+    ${li>=0?`<button data-a="undo" data-id="${id}" title="ย้อนขั้นตอนล่าสุด">↩</button>`:""}
+    <button data-a="help" data-id="${id}">${j.help?"✅ แก้ปัญหาแล้ว":"🆘 Help"}</button>
+    <button data-a="edit" data-id="${id}">แก้ไข</button><button class="danger" data-a="del" data-id="${id}">ลบ</button></div>`:""}</div>`}
+
+/* ---------- events ---------- */
+$("#tabs").onclick=e=>{const b=e.target.closest("button");if(b){S.tab=b.dataset.t;render()}};
+$("#pchips").onclick=e=>{const b=e.target.closest("button");if(b){S.prov=b.dataset.p;S.dist="all";render()}};
+$("#chips").onclick=e=>{const b=e.target.closest("button");if(b){S.flt=b.dataset.f;render()}};
+$("#fpr").onchange=e=>{S.pri=e.target.value;render()};
+$("#fby").onchange=e=>{S.by=e.target.value;render()};
+$("#fdf").onchange=e=>{S.df=e.target.value;if(S.dt&&S.df>S.dt)S.dt=S.df;render()};
+$("#fdt").onchange=e=>{S.dt=e.target.value;if(S.df&&S.dt<S.df)S.df=S.dt;render()};
+const setR=(a,b)=>{S.df=a;S.dt=b;render()};
+$("#fp1").onclick=()=>setR(today(),today());
+$("#fp7").onclick=()=>{const d=new Date();d.setDate(d.getDate()-6);setR(dk(d),today())};
+$("#fpm").onclick=()=>{const d=new Date();setR(dk(new Date(d.getFullYear(),d.getMonth(),1)),today())};
+$("#fclr").onclick=()=>setR("","");
+$("#q").oninput=e=>{S.q=e.target.value;jobsView()};
+function confirmDel(t,fn){$("#cfm-t").textContent=t;$("#cfm").showModal();$("#cfm-yes").onclick=()=>{fn();$("#cfm").close()}}
+$("#cfm-no").onclick=()=>$("#cfm").close();
+$("#list").onclick=e=>{const b=e.target.closest("button");if(!b)return;const j=data.jobs.find(x=>String(x.id)===b.dataset.id);if(!j)return;const a=b.dataset.a;
+  if(!j.steps)j.steps={};
+  if(a==="next"){const nx=STEPS[lastIdx(j)+1];if(nx){j.steps[nx[0]]=now();log("job","JB26-"+j.no,"อัปเดตสถานะ → "+nx[1]);persist("jobs",j)}}
+  else if(a==="undo"){const i=lastIdx(j);if(i>=0){j.steps[STEPS[i][0]]=null;log("job","JB26-"+j.no,"ย้อนขั้นตอน "+STEPS[i][1]);persist("jobs",j)}}
+  else if(a==="help"){j.help=j.help?null:{at:now(),note:""};log("job","JB26-"+j.no,j.help?"แจ้ง Help":"ปิด Help (แก้ปัญหาแล้ว)");persist("jobs",j);if(j.help)openJob(j)}
+  else if(a==="edit")openJob(j);
+  else if(a==="del")confirmDel("ลบงาน JB26-"+j.no+" ใช่หรือไม่?",()=>{log("job","JB26-"+j.no,"ลบงาน");remove("jobs",j)})};
+
+/* job form */
+$("#times").innerHTML=STEPS.map(([k,l])=>`<div><label>${l}</label><input type="datetime-local" id="t-${k}"></div>`).join("");
+$("#f-prov").innerHTML=opts(Object.keys(PROV),"",["","— เลือกจังหวัด —"]);
+$("#f-prov").onchange=()=>fillDist("");
+$("#f-pri").innerHTML=PRI.map(p=>`<option value="${p}">${p} — ปิดงานไม่เกิน ${SLAT[p]}</option>`).join("");
+function updSla(){$("#f-sla").textContent="SLA: ต้องปิดงานภายใน "+SLAT[$("#f-pri").value]+" นับจากเวลา Create"}
+$("#f-pri").onchange=()=>{updSla();recalcCreate()};
+function parseTicket(T){
+  T=String(T).replace(/\u00a0/g," ");const r={};let m,x;
+  m=T.match(/JB26-?(\d{7})/i);if(m)r.no=m[1];
+  m=T.match(/JB26-?\d{7}\s*:\s*([^:\n]+?)\s*:/i);if(m)r.title=m[1].trim();
+  m=T.match(/\b(None|Minor|Major|Critical)\b/i);if(m)r.priority=m[1][0].toUpperCase()+m[1].slice(1).toLowerCase();
+  m=T.match(/Finish\s*Before\s*(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})\s+(\d{1,2}):(\d{2})/i);
+  if(m){const d=new Date(+m[3],+m[2]-1,+m[1],+m[4],+m[5]);if(!isNaN(d))r.due=d.toISOString()}
+  m=T.match(/Finish\s*Before\s*[\d\-\/: ]+\s+to\s+(.+?)\s+by\s+(.*)$/im)||T.match(/\bto\s+(.+?)\s+by\s+(.*)$/im);
+  if(m){r.rcv=m[1].trim();const sp=m[2],ph=sp.match(/0\d[\d-]{7,10}/);let tail=T.slice(m.index+m[0].length);
+    if(ph){r.snd=sp.slice(0,ph.index).trim();r.tel=ph[0].replace(/\D/g,"");const rest=sp.slice(ph.index+ph[0].length);tail=rest+"\n"+tail;r.desc=T.slice(0,m.index+m[0].length-rest.length).trim()}
+    else{r.snd=sp.trim();r.desc=T.slice(0,m.index+m[0].length).trim()}
+    r.team=tail.split(/[,\u060c\u3001\n\/]|และ/).map(s=>s.trim()).filter(s=>s&&s.length<=30).slice(0,3)}
+  else r.desc=T.trim();
+  const pts=[],seen=new Set();
+  const add=(lat,lng,n)=>{lat=+lat;lng=+lng;if(!(lat>=3&&lat<=22&&lng>=95&&lng<=107))return;const k=lat.toFixed(6)+","+lng.toFixed(6);if(seen.has(k))return;seen.add(k);pts.push({n:n||"",lat:String(+lat.toFixed(6)),lng:String(+lng.toFixed(6))})};
+  const re=/(-?\d{1,2}\.\d{3,})\s*[,;\/\s]\s*(-?\d{2,3}\.\d{3,})/g;
+  while((x=re.exec(T))&&pts.length<10){const pre=T.slice(Math.max(0,x.index-40),x.index).match(/([A-Za-z0-9_\-]{3,})\s*[\[\(]?\s*$/);add(x[1],x[2],pre?pre[1]:"")}
+  const dm=/(\d{1,3})\s*°\s*(\d{1,2})\s*['′]\s*(\d{1,2}(?:\.\d+)?)\s*["″]?\s*([NS])[\s,]*(\d{1,3})\s*°\s*(\d{1,2})\s*['′]\s*(\d{1,2}(?:\.\d+)?)\s*["″]?\s*([EW])/gi;
+  const cv=(d,mi,s,h)=>(+d+ +mi/60+ +s/3600)*(/[SW]/i.test(h)?-1:1);
+  while((x=dm.exec(T))&&pts.length<10)add(cv(x[1],x[2],x[3],x[4]),cv(x[5],x[6],x[7],x[8]),"");
+  const ur=/https?:\/\/(?:www\.)?(?:maps\.google\.[a-z.]+|google\.[a-z.]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps)[^\s<>"')\]]*/gi;
+  while((x=ur.exec(T))&&pts.length<10){if(!/-?\d{1,2}\.\d+(?:,|%2C)-?\d{2,3}\.\d+/.test(x[0]))pts.push({n:"ลิงก์แผนที่",lat:"",lng:"",url:x[0]})}
+  r.pts=pts;
+  const CODE={PTN:"ปัตตานี",YLA:"ยะลา",NWT:"นราธิวาส",SKA:"สงขลา"};
+  const cs=[...T.matchAll(/(?:^|[^A-Za-z])(PTN|YLA|NWT|SKA)\d{2,}/gi)].map(z=>CODE[z[1].toUpperCase()]);
+  if(cs.length){r.prov=cs[0];r.multi=new Set(cs).size>1}
+  if(!r.prov)for(const p of Object.keys(PROV))if(T.includes(p)){r.prov=p;break}
+  for(const p of r.prov?[r.prov]:Object.keys(PROV)){const d=PROV[p].find(n=>T.includes(n));if(d){r.prov=p;r.dist=d;break}}
+  r.auto=/\bauto\b/i.test(r.snd||"");
+  return r}
+function showPts(){$("#f-pts").innerHTML=curPts.map(ptLink).join("")}
+function setCreate(due,p){const d=new Date(new Date(due).getTime()-SLA[p]*36e5);$("#t-create").value=toLocal(d.toISOString());return d.toISOString()}
+function recalcCreate(){const v=$("#f-due").value;if(autoCreate&&v)setCreate(new Date(v).toISOString(),$("#f-pri").value)}
+function applyPaste(){
+  const t=$("#f-paste").value;if(!t.trim()){$("#f-parsed").textContent="";return}
+  const r=parseTicket(t),got=[];
+  const set=(id,v,l)=>{if(v){$(id).value=v;got.push(l)}};
+  if(r.no){$("#f-no").value=r.no;got.push("เลขงาน")}
+  set("#f-title",r.title,"หัวข้อ");
+  if(r.priority){$("#f-pri").value=r.priority;updSla();got.push("Priority "+r.priority)}
+  if(r.due){$("#f-due").value=toLocal(r.due);const c=setCreate(r.due,$("#f-pri").value);autoCreate=true;got.push("เส้นตาย "+fDT(r.due),"Create "+fDT(c)+" (เส้นตาย − SLA)")}
+  set("#f-snd",r.snd,r.auto?"ผู้ส่ง: ระบบ Auto":"ผู้ส่งงาน");set("#f-tel",r.tel,"เบอร์");set("#f-rcv",r.rcv,"ผู้รับงาน");
+  if(r.team&&r.team.length){[0,1,2].forEach(i=>$("#m"+i).value=r.team[i]||"");got.push("ทีมช่าง "+r.team.length+" คน")}
+  if(r.desc){$("#f-desc").value=r.desc;got.push("รายละเอียด")}
+  if(r.pts.length){curPts=r.pts;showPts();got.push("พิกัด/ลิงก์แผนที่ "+r.pts.length+" จุด")}
+  if(r.prov){$("#f-prov").value=r.prov;got.push("จังหวัด")}
+  const dup=r.no&&data.jobs.some(x=>x.no===r.no&&String(x.id)!==String(editId));
+  $("#f-parsed").innerHTML=(got.length?"✅ ดึงข้อมูลได้: "+got.map(esc).join(" · "):"⚠️ ไม่พบรูปแบบที่รู้จัก")+(r.multi?"<br>⚠️ พบรหัสไซต์หลายจังหวัด ใช้จังหวัดแรก กรุณาตรวจสอบ":"")+(dup?'<br><span class="late">⚠️ เลขงานนี้มีอยู่แล้ว</span>':"")+(!$("#f-prov").value?"<br>👉 กรุณาเลือกจังหวัดเอง":"");
+}
+$("#t-create").addEventListener("input",()=>{autoCreate=false});
+let tmr;$("#f-paste").addEventListener("input",()=>{clearTimeout(tmr);tmr=setTimeout(applyPaste,250)});
+function fillDist(){}
+function openJob(j){editId=j?j.id:null;$("#dt").textContent=j?"แก้ไขงาน":"เพิ่มงาน";$("#err").textContent="";
+  $("#f-no").value=j?j.no:"";$("#f-pri").value=j?pri(j):"None";updSla();$("#f-paste").value="";$("#f-parsed").textContent="";$("#f-title").value=j?j.title||"":"";$("#f-snd").value=j?j.sender||"":"";$("#f-tel").value=j?j.senderTel||"":"";$("#f-rcv").value=j?j.receiver||"":"";$("#f-due").value=j?toLocal(j.deadline):"";curPts=j&&j.pts?j.pts.slice():[];autoCreate=false;showPts();warnKey="";$("#f-teamsel").innerHTML=teamOpts("","— เลือกกองงาน —");$("#f-desc").value=j?j.desc||"":"";[0,1,2].forEach(i=>$("#m"+i).value=j&&j.team?j.team[i]||"":"");
+  $("#f-prov").value=j&&PROV[j.province]?j.province:(S.prov!=="all"?S.prov:"");fillDist(j?j.district:(S.dist!=="all"?S.dist:""));
+  STEPS.forEach(([k])=>$("#t-"+k).value=j?toLocal(j.steps&&j.steps[k]):(k==="create"?toLocal(now()):""));
+  $("#f-help").checked=!!(j&&j.help);$("#f-note").value=j&&j.help?j.help.note||"":"";$("#dlg").showModal()}
+$("#add").onclick=()=>openJob(null);$("#cancel").onclick=()=>$("#dlg").close();
+function lock(){busy=true;setTimeout(()=>busy=false,700)}
+$("#save").onclick=()=>{if(busy)return;const err=m=>{$("#err").textContent=m};
+  const no=$("#f-no").value.trim();if(!/^\d{7}$/.test(no))return err("เลขงานต้องเป็นตัวเลข 7 หลัก (JB26-xxxxxxx)");
+  const team=[0,1,2].map(i=>$("#m"+i).value.trim());if(!team.some(Boolean))return err("กรอกชื่อช่างอย่างน้อย 1 คน");
+  const lv=team.filter(n=>n&&data.techs.some(t=>t.name===n&&onLeave(t))).join(", ");if(lv&&warnKey!==lv){warnKey=lv;return err("⚠️ "+lv+" ลางานอยู่ กด บันทึก อีกครั้งเพื่อยืนยัน")}
+  const province=$("#f-prov").value;if(!province)return err("กรุณาเลือกจังหวัด");
+  if(data.jobs.some(x=>x.no===no&&String(x.id)!==String(editId)))return err("เลขงานนี้มีอยู่แล้ว");
+  const steps={};STEPS.forEach(([k])=>{const v=$("#t-"+k).value;steps[k]=v?new Date(v).toISOString():null});
+  let prev=null;for(const[k,l]of STEPS){const v=steps[k];if(v){if(prev&&v<prev)return err("เวลาของ "+l+" ต้องไม่ก่อนขั้นตอนก่อนหน้า");prev=v}}
+  const old=data.jobs.find(x=>String(x.id)===String(editId));
+  const help=$("#f-help").checked?{at:(old&&old.help&&old.help.at)||now(),note:$("#f-note").value.trim()}:null;
+  const dv=$("#f-due").value;
+  const d={no,priority:$("#f-pri").value,title:$("#f-title").value.trim(),sender:$("#f-snd").value.trim(),senderTel:$("#f-tel").value.trim(),receiver:$("#f-rcv").value.trim(),deadline:dv?new Date(dv).toISOString():null,pts:curPts,desc:$("#f-desc").value.trim(),team,province,steps,help};
+  lock();let t=old;const before=old?JSON.parse(JSON.stringify(old)):null;if(old)Object.assign(old,d);else{t={id:String(Date.now()),...d};if(!cols.jobs)data.jobs.push(t)}
+  if(before){const df=diffJob(before,t);if(df.length)log("job","JB26-"+no,"แก้ไข: "+df.join(" · "))}else log("job","JB26-"+no,"สร้างงาน (Priority "+d.priority+")");
+  persist("jobs",t);$("#dlg").close()};
+
+/* ---------- team management ---------- */
+const findT=id=>data.techs.find(x=>String(x.id)===String(id)),findM=id=>data.teams.find(x=>String(x.id)===String(id));
+const onLeave=t=>t.leave?(t.leave.from<=today()&&today()<=t.leave.to):t.present===false;
+const ltypeOf=l=>l&&(l.type==="off"||(!l.type&&l.note==="วันหยุด"))?"off":"leave";
+const ltype=t=>onLeave(t)?ltypeOf(t.leave):"work";
+const lvLabel=t=>ltype(t)==="off"?"วันหยุด":"ลา";
+const busyT=t=>data.jobs.some(j=>!fin(j)&&(j.team||[]).includes(t.name));
+const tstat=t=>onLeave(t)?"leave":onLeave(t)?"off":busyT(t)?"busy":"free";
+const TS={free:["✅ ว่าง","c-done"],busy:["🛠 กำลังทำงาน","c-onsite"],off:["⛔ ไม่มา","c-create"],leave:["🏖 ลางาน","c-help"]};
+const byName=(a,b)=>String(a.name).localeCompare(String(b.name),"th",{numeric:true,sensitivity:"base"});
+const grouped=ts=>{const nm=(a,b)=>a.name.localeCompare(b.name,"th",{numeric:true}),w=ts.filter(t=>!onLeave(t)).sort(nm),l=ts.filter(onLeave).sort(nm),o=[],used=new Set();
+  data.teams.slice().sort(byName).forEach(m=>{w.filter(t=>String(t.teamId)===String(m.id)).forEach(t=>{o.push(t);used.add(t)})});
+  w.filter(t=>!used.has(t)).forEach(t=>o.push(t));
+  return o.concat(l)};
+const teamName=id=>{const m=findM(id);return m?m.name:""};
+const TPFX={"ปัตตานี":"PTN","ยะลา":"YLA","นราธิวาส":"NWT"};
+const teamOpts=(sel,ph,prov)=>`<option value="">${ph||"— ไม่มีทีม —"}</option>`+data.teams.slice().sort(byName).filter(m=>!prov||!TPFX[prov]||String(m.name).toUpperCase().startsWith(TPFX[prov])||String(m.id)===String(sel)).map(m=>`<option value="${esc(m.id)}" ${String(m.id)===String(sel)?"selected":""}>${esc(m.name)}</option>`).join("");
+const working=t=>["free","busy"].includes(tstat(t));
+const slaShort=j=>{const s=slaInfo(j);if(!s)return"";return s.over?`<span class="late">⏱ เกิน ${dur(-s.diff)}</span>`:`<span class="${s.near?"sla warn":""}">${s.near?"⚠️ ":"⏳ "}เหลือ ${dur(s.diff)}</span>`};
+function teamStatus(aj,mem){
+  if(aj.length)return aj.map(j=>`<div class="sla" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span class="pb c-${status(j)}">${label(status(j))}</span><b>JB26-${esc(j.no)}</b><span class="pb p-${pri(j)}">${pri(j)}</span>${slaShort(j)}</div>`).join("");
+  return mem.some(working)?'<div class="sla"><span class="pb c-done">✅ ว่าง</span></div>':'<div class="sla"><span class="pb c-create">ไม่มีช่างพร้อมทำงาน</span></div>'}
+function techLine(t){if(onLeave(t))return"";const aj=data.jobs.filter(j=>!fin(j)&&(j.team||[]).includes(t.name));return teamStatus(aj,[t])}
+function teamView(){
+  const ts=data.techs.filter(inProv),tm=data.teams.filter(inProv),c=k=>ts.filter(t=>tstat(t)===k).length;
+  const noTeam=ts.filter(t=>!t.teamId&&working(t)).length,card=(cl,n,t)=>`<div class="stat ${cl}"><b>${n}</b><span>${t}</span></div>`;
+  $("#tstats").innerHTML=card("",ts.length,"ช่างทั้งหมด")+card("c-done",ts.filter(working).length,"มาทำงานวันนี้")+card("c-accept",c("free"),"ว่าง")+card("c-onsite",c("busy"),"กำลังทำงาน")+card("c-help",c("leave"),"ลา / วันหยุด")+card("c-depart",tm.length,"จำนวนทีม")+card("c-create",noTeam,"มาทำงานแต่ยังไม่มีทีม");
+  const chip=t=>onLeave(t)?`<span style="opacity:.5">${esc(t.name)} ${ltype(t)==="off"?"📅":"🏖"}</span>`:`<span>${esc(t.name)} <b style="color:#22c55e" title="ทำงาน">✓</b></span>`;
+  $("#tmlist").innerHTML=tm.length?tm.slice().sort(byName).map(m=>{const mem=data.techs.filter(t=>String(t.teamId)===String(m.id)),id=esc(m.id),aj=data.jobs.filter(j=>!fin(j)&&(j.team||[]).some(n=>mem.some(t=>t.name===n)));
+    return `<div class="job c-accept"><div class="top"><span class="no">👥 ${esc(m.name)}</span><span class="badge">ทีม ${mem.length} คน</span></div>
+    <div class="mut">📍 ${esc(m.province||"–")}</div>${teamStatus(aj,mem)}<div class="team">${mem.map(chip).join("")||"<span>ยังไม่มีสมาชิก</span>"}</div>
+    ${canWrite?`<div class="act"><button data-a="medit" data-id="${id}">แก้ไข / จับคู่</button><button class="danger" data-a="mdel" data-id="${id}">ลบทีม</button></div>`:""}</div>`}).join(""):'<div class="empty">ยังไม่มีทีม กด ＋ สร้างทีม</div>';
+  $("#tclist").innerHTML=ts.length?grouped(ts).map(t=>{const s=tstat(t),id=esc(t.id),cu=ltype(t),cl=cu==="work"?"c-done":cu==="off"?"c-create":"c-help";
+    return `<div class="li" style="align-items:center;flex-wrap:wrap"><span><b>${esc(t.name)}</b><br><span class="mut">${esc(t.province||"–")}${t.phone?" · "+esc(t.phone):""}${t.leave&&t.leave.to>=today()?" · "+(ltypeOf(t.leave)==="off"?"📅 วันหยุด ":"🏖 ลา ")+esc(t.leave.from)+" → "+esc(t.leave.to)+(t.leave.note&&t.leave.note!=="วันหยุด"?" ("+esc(t.leave.note)+")":""):""}</span></span>
+    ${canWrite?`<span class="act" style="margin:0"><select data-a="tsel" data-id="${id}" style="width:auto;padding:5px 8px">${teamOpts(t.teamId)}</select><select data-a="tstat" data-id="${id}" class="${cl}" style="width:auto;padding:5px 8px;background:var(--c);border-color:var(--c);color:#fff;font-weight:700;min-width:108px">${[["work","✅ ทำงาน"],["leave","🏖 ลา"],["off","📅 วันหยุด"]].map(([v,l])=>`<option value="${v}"${v===cu?" selected":""}>${l}</option>`).join("")}</select><button data-a="tedit" data-id="${id}">แก้ไข</button><button class="danger" data-a="tdel" data-id="${id}">ลบ</button></span>`:`<span class="pb ${cl}">${cu==="work"?"ทำงาน":cu==="off"?"วันหยุด":"ลา"}</span> <span class="mut">${t.teamId?"👥 "+esc(teamName(t.teamId)):"ยังไม่มีทีม"}</span>`}</div>`}).join(""):'<div class="mut">ยังไม่มีช่าง กด ＋ เพิ่มช่าง</div>';
+}
+$("#v-team").onclick=e=>{const b=e.target.closest("button[data-a]");if(!b)return;const a=b.dataset.a,id=b.dataset.id,t=findT(id),m=findM(id);
+  if(a==="tpres"&&t)openLeave(t);
+  else if(a==="tedit"&&t)openTech(t);
+  else if(a==="tdel"&&t)confirmDel("ลบช่าง "+t.name+" ใช่หรือไม่?",()=>{log("tech",t.name,"ลบช่าง");remove("techs",t)});
+  else if(a==="medit"&&m)openTeam(m);
+  else if(a==="mdel"&&m)confirmDel("ลบทีม "+m.name+" ใช่หรือไม่? (ช่างในทีมจะกลายเป็นยังไม่มีทีม)",()=>{log("team",m.name,"ลบกองงาน");data.techs.filter(x=>String(x.teamId)===String(m.id)).forEach(x=>{x.teamId="";persist("techs",x)});remove("teams",m)})};
+$("#v-team").onchange=e=>{const w=e.target.closest("select[data-a=tstat]");if(w){const t=findT(w.dataset.id);if(!t)return;
+  if(w.value==="work"){if(t.leave||t.present===false){t.leave=null;t.present=true;log("tech",t.name,"เปลี่ยนสถานะ → ทำงาน (ยกเลิกการลา/วันหยุด)");persist("techs",t)}else render()}
+  else openLeave(t,w.value);return}
+  const s=e.target.closest("select[data-a=tsel]");if(!s)return;const t=findT(s.dataset.id);if(t){const a=teamName(t.teamId)||"ไม่มีทีม",b=teamName(s.value)||"ไม่มีทีม";t.teamId=s.value;log("tech",t.name,"ย้ายกองงาน: "+a+" → "+b);persist("techs",t)}};
+$("#t-prov").innerHTML=opts(Object.keys(PROV),"",["","— เลือกจังหวัด —"]);
+$("#tm-prov").innerHTML=opts(Object.keys(PROV),"",["","— เลือกจังหวัด —"]);
+let editT=null,editM=null;
+function openTech(t){editT=t?t.id:null;$("#tt").textContent=t?"แก้ไขช่าง":"เพิ่มช่าง";$("#err3").textContent="";
+  $("#t-name").value=t?t.name:"";$("#t-tel").value=t?t.phone||"":"";$("#t-prov").value=t&&PROV[t.province]?t.province:(S.prov!=="all"?S.prov:"");
+  $("#t-team").innerHTML=teamOpts(t?t.teamId:"","",$("#t-prov").value);$("#dlg3").showModal()}
+$("#t-prov").onchange=()=>{const v=$("#t-prov").value,c=$("#t-team").value,m=findM(c),ok=m&&(!TPFX[v]||String(m.name).toUpperCase().startsWith(TPFX[v]));$("#t-team").innerHTML=teamOpts(ok?c:"","",v)};
+$("#addt").onclick=()=>openTech(null);$("#cancel3").onclick=()=>$("#dlg3").close();
+$("#save3").onclick=()=>{if(busy)return;const err=m=>{$("#err3").textContent=m};
+  const name=$("#t-name").value.trim(),province=$("#t-prov").value;
+  if(!name)return err("กรอกชื่อช่าง");if(!province)return err("เลือกจังหวัด");
+  if(data.techs.some(x=>x.name===name&&String(x.id)!==String(editT)))return err("มีช่างชื่อนี้อยู่แล้ว (ชื่อต้องไม่ซ้ำ)");
+  const d={name,phone:$("#t-tel").value.trim(),province,teamId:$("#t-team").value},old=findT(editT);
+  lock();let o=old;if(old)Object.assign(old,d);else{o={id:String(Date.now()),...d};if(!cols.techs)data.techs.push(o)}log("tech",name,old?"แก้ไขข้อมูลช่าง":"เพิ่มช่าง");
+  persist("techs",o);$("#dlg3").close()};
+let memSel=new Set();
+function memList(){const sel=memSel,f=$("#tm-flt").value,ts=data.techs.filter(t=>f==="all"||t.province===f).sort((a,b)=>(onLeave(a)?1:0)-(onLeave(b)?1:0)||a.name.localeCompare(b.name,"th",{numeric:true}));
+  $("#tm-mem").innerHTML=ts.length?ts.map(t=>`<label style="display:flex;gap:8px;align-items:center;margin:4px 0;color:var(--tx)"><input type="checkbox" value="${esc(t.id)}" ${sel.has(String(t.id))?"checked":""} style="width:auto"> ${esc(t.name)} <span class="mut">${esc(t.province||"")}${t.teamId&&String(t.teamId)!==String(editM)?" · อยู่ทีม "+esc(teamName(t.teamId)):""}</span>${ltype(t)==="work"?"":ltype(t)==="off"?' <span class="pb c-create">📅 วันหยุด</span>':' <span class="pb c-help">🏖 ลา</span>'}</label>`).join(""):'<div class="mut">ไม่พบช่างในจังหวัดนี้</div>'}
+$("#tm-mem").onchange=e=>{const c=e.target.closest("input[type=checkbox]");if(!c)return;c.checked?memSel.add(String(c.value)):memSel.delete(String(c.value))};
+$("#tm-flt").onchange=()=>{const v=$("#tm-flt").value;if(v!=="all")$("#tm-prov").value=v;memList()};
+$("#tm-prov").onchange=e=>{const v=e.target.value;if(["ปัตตานี","ยะลา","นราธิวาส"].includes(v)){$("#tm-flt").value=v;memList()}};
+function openTeam(m){editM=m?m.id:null;$("#tmt").textContent=m?"แก้ไขทีม":"สร้างทีม";$("#err4").textContent="";
+  $("#tm-name").value=m?m.name:"";$("#tm-prov").value=m&&PROV[m.province]?m.province:(S.prov!=="all"?S.prov:"");
+  memSel=new Set(data.techs.filter(t=>m&&String(t.teamId)===String(m.id)).map(t=>String(t.id)));
+  const pv=$("#tm-prov").value;$("#tm-flt").value=["ปัตตานี","ยะลา","นราธิวาส"].includes(pv)?pv:"all";memList();$("#dlg4").showModal()}
+$("#addtm").onclick=()=>openTeam(null);$("#cancel4").onclick=()=>$("#dlg4").close();
+$("#save4").onclick=()=>{if(busy)return;const err=m=>{$("#err4").textContent=m};
+  const name=$("#tm-name").value.trim(),fv=$("#tm-flt").value;let province=fv!=="all"?fv:$("#tm-prov").value;
+  if(!province){const c={};[...memSel].forEach(i=>{const t=findT(i);if(t&&t.province)c[t.province]=(c[t.province]||0)+1});province=Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||""}
+  if(!name)return err("กรอกชื่อทีม");if(!province)return err("เลือกจังหวัด");
+  if(data.teams.some(x=>x.name===name&&String(x.id)!==String(editM)))return err("มีชื่อทีมนี้อยู่แล้ว");
+  const ids=[...memSel],old=findM(editM),d={name,province};
+  lock();let o=old;if(old)Object.assign(old,d);else{o={id:String(Date.now()),...d};if(!cols.teams)data.teams.push(o)}log("team",name,old?"แก้ไขกองงาน":"สร้างกองงาน");
+  persist("teams",o);
+  data.techs.forEach(t=>{const inT=ids.includes(String(t.id)),was=String(t.teamId)===String(o.id);if(inT&&!was){t.teamId=o.id;log("team",name,"เพิ่ม "+t.name+" เข้ากองงาน");persist("techs",t)}else if(!inT&&was){t.teamId="";log("team",name,"นำ "+t.name+" ออกจากกองงาน");persist("techs",t)}});
+  $("#dlg4").close()};
+$("#f-teamsel").onchange=e=>{const m=findM(e.target.value);if(!m)return;
+  const n=data.techs.filter(t=>String(t.teamId)===String(m.id)&&working(t)).map(t=>t.name).slice(0,3);
+  [0,1,2].forEach(i=>$("#m"+i).value=n[i]||"");if(!$("#f-prov").value&&m.province)$("#f-prov").value=m.province};
+
+/* ---------- history ---------- */
+let UAPI=null,ME="",NAMES={};
+function log(){}
+const FIELDS=[["no","เลขงาน"],["priority","Priority"],["title","หัวข้อ"],["province","จังหวัด"],["sender","ผู้ส่งงาน"],["senderTel","เบอร์ผู้ส่ง"],["receiver","ผู้รับงาน"]];
+function diffJob(o,n){const out=[],os=o.steps||{},ns=n.steps||{};
+  FIELDS.forEach(([k,l])=>{const a=o[k]??"",b=n[k]??"";if(String(a)!==String(b))out.push(l+": "+(a||"–")+" → "+(b||"–"))});
+  if((o.desc||"")!==(n.desc||""))out.push("รายละเอียดแก้ไข");
+  const ot=(o.team||[]).filter(Boolean).join(", "),nt=(n.team||[]).filter(Boolean).join(", ");if(ot!==nt)out.push("ทีมช่าง: "+(ot||"–")+" → "+(nt||"–"));
+  if((o.deadline||"")!==(n.deadline||""))out.push("เส้นตาย: "+fDT(o.deadline)+" → "+fDT(n.deadline));
+  STEPS.forEach(([k,l])=>{if((os[k]||"")!==(ns[k]||""))out.push(l+": "+(os[k]?fDT(os[k]):"–")+" → "+(ns[k]?fDT(ns[k]):"–"))});
+  if(!o.help!==!n.help)out.push(n.help?"แจ้ง Help":"ปิด Help");else if(o.help&&n.help&&(o.help.note||"")!==(n.help.note||""))out.push("หมายเหตุ Help แก้ไข");
+  return out}
+
+/* technician leave dates */
+let lvT=null;
+function lvTitle(t){const o=$("#lv-type").value==="off";$("#lvt").textContent=(o?"วันหยุด: ":"ลางาน: ")+t.name;$("#lv-note").placeholder=o?"เช่น วันหยุดประจำสัปดาห์ (ไม่ใส่ก็ได้)":"ลาป่วย / ลากิจ / พักร้อน"}
+function openLeave(t,type){lvT=t.id;$("#err5").textContent="";const l=t.leave;
+  $("#lv-type").value=type||(l?ltypeOf(l):"leave");lvTitle(t);
+  $("#lv-from").value=l?l.from:today();$("#lv-to").value=l?l.to:today();$("#lv-note").value=l&&l.note&&l.note!=="วันหยุด"?l.note:"";$("#lv-clear").hidden=!(l||t.present===false);$("#dlg5").showModal()}
+$("#lv-type").onchange=()=>{const t=findT(lvT);if(t)lvTitle(t)};
+$("#dlg5").addEventListener("close",()=>render());
+$("#cancel5").onclick=()=>$("#dlg5").close();
+$("#save5").onclick=()=>{if(busy)return;const t=findT(lvT);if(!t)return;const from=$("#lv-from").value,to=$("#lv-to").value,note=$("#lv-note").value.trim(),e=$("#err5");
+  if(!from||!to){e.textContent="เลือกวันที่ลา";return}if(to<from){e.textContent="วันที่สิ้นสุดต้องไม่ก่อนวันที่เริ่ม";return}
+  lock();const was=!!t.leave,ty=$("#lv-type").value,tl=ty==="off"?"วันหยุด":"ลา";t.leave={from,to,note,type:ty};t.present=true;
+  log("tech",t.name,(was?"แก้ไข":"บันทึก")+tl+" "+from+" ถึง "+to+(note?" ("+note+")":""));persist("techs",t);$("#dlg5").close()};
+$("#lv-clear").onclick=()=>{const t=findT(lvT);if(!t)return;t.leave=null;t.present=true;log("tech",t.name,"ยกเลิกการลา");persist("techs",t);$("#dlg5").close()};
+/* export */
+$("#exp").onclick=async()=>{if(!DL)return;const rows=jobsF().filter(match).filter(flt);
+  const c=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+  const head=["เลขงาน","Priority","SLA","หัวข้อ","ผู้ส่งงาน","เบอร์ผู้ส่ง","ผู้รับงาน","เส้นตาย","รายละเอียด","จังหวัด","ช่าง 1","ช่าง 2","ช่าง 3","สถานะ",...STEPS.map(x=>x[1]),"Help เมื่อ","หมายเหตุ Help"];
+  const lines=[head,...rows.map(j=>{const t=j.team||[],s=j.steps||{};return["JB26-"+j.no,pri(j),SLAT[pri(j)],j.title||"",j.sender||"",j.senderTel||"",j.receiver||"",fFull(j.deadline),j.desc,j.province,t[0]||"",t[1]||"",t[2]||"",label(status(j)),...STEPS.map(([k])=>fFull(s[k])),j.help?fFull(j.help.at):"",j.help?(j.help.note||""):""]})];
+  const csv="\uFEFF"+lines.map(r=>r.map(c).join(",")).join("\r\n");
+  try{await DL.save({filename:"jobs-"+today()+".csv",data:new Blob([csv],{type:"text/csv;charset=utf-8"})})}catch(e){}};
+
+data.jobs=lsGet(KEY.jobs);data.leaves=lsGet(KEY.leaves);data.techs=lsGet(KEY.techs);data.teams=lsGet(KEY.teams);data.history=lsGet(KEY.history);render();initDb();
+setInterval(()=>{if(S.tab!=="leave"&&!document.querySelector("dialog[open]"))render()},60000);
+
+/* role from the RNOC map page (saved in localStorage): view-only code => read-only tracker */
+const applyMapRole=()=>{let r="";try{r=localStorage.getItem("rnoc_role")||""}catch(e){}const w=r!=="view";if(w!==canWrite){canWrite=w;render()}};
+try{const q=new URLSearchParams(location.search).get("role");if(q==="view"||q==="edit"){localStorage.setItem("rnoc_role",q);history.replaceState(null,"",location.pathname)}}catch(e){}
+applyMapRole();
+</script>
+</body>
+</html>
